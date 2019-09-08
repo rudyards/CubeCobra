@@ -1921,6 +1921,55 @@ router.get('/decks/:id', function(req, res) {
   });
 });
 
+router.get('/decks/:id/export', function(req, res) {
+  Deck.findOne(build_id_query(req.params.id), function(err, deck) {
+    if (!deck) {
+      req.flash('danger', 'Deck not found');
+      res.redirect('/404/');
+    } else {
+      res.setHeader('Content-disposition', 'attachment; filename=' + deck.name.replace(/\W/g, '') + '.csv');
+      res.setHeader('Content-type', 'text/plain');
+      res.charset = 'UTF-8';
+      res.write('Name,CMC,Type,Color,Set,Status,Tags\r\n');
+      cube.cards.forEach(function(card, index) {
+        if (!card.type_line) {
+          card.type_line = carddb.carddict[card.cardID].type;
+        }
+        var name = carddb.carddict[card.cardID].name;
+        while (name.includes('"')) {
+          name = name.replace('"', '-quote-');
+        }
+        while (name.includes('-quote-')) {
+          name = name.replace('-quote-', '""');
+        }
+        res.write('"' + name + '"' + ',');
+        res.write(card.cmc + ',');
+        res.write('"' + card.type_line.replace('—', '-') + '"' + ',');
+        if (card.colors.length == 0) {
+          res.write('C,');
+        } else if (card.type_line.toLowerCase().includes('land')) {
+          res.write('L,');
+        } else {
+          card.colors.forEach(function(color, c_index) {
+            res.write(color);
+          });
+          res.write(',');
+        }
+        res.write('"' + carddb.carddict[card.cardID].set + '"' + ',');
+        res.write(card.status + ',"');
+        card.tags.forEach(function(tag, t_index) {
+          if (t_index != 0) {
+            res.write(', ');
+          }
+          res.write(tag);
+        });
+        res.write('"\r\n');
+      });
+      res.end();
+    }
+  });
+});
+
 router.get('/deckbuilder/:id', function(req, res) {
   Deck.findById(req.params.id, function(err, deck) {
     if (err || !deck) {
