@@ -17,8 +17,7 @@ block cube_content
         h4 
           Drafted by #{drafter} 
           #{deck_id}
-
-          a(href='/decks/'+{deck_id}+'/export')
+          a(href='/decks/'+deck_id+'/export')
             button.exportButton.btn.btn-success(type="button") Export Draft
       .card-body
         input#deckraw(type='hidden', name='deckraw', value=deck)
