@@ -5,7 +5,7 @@ block cube_content
   br
   if oldformat
     .container
-      h4 Drafted by #{drafter}
+      h4 Drafted by #{drafter} 
       br
       .row
         each card, i in cards
@@ -14,7 +14,12 @@ block cube_content
   else
     .card.card-hover#deckhover
       .card-header
-        h4 Drafted by #{drafter}
+        h4 
+          Drafted by #{drafter} 
+          #{deck_id}
+
+          a(href='/decks/'+{deck_id}+'/export')
+            button.exportButton.btn.btn-success(type="button") Export Draft
       .card-body
         input#deckraw(type='hidden', name='deckraw', value=deck)
         #deckarea(style='margin: 3px;')

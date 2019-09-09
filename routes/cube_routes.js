@@ -2046,6 +2046,7 @@ router.get('/deck/:id', function(req, res) {
               }
               var player_deck = [];
               var bot_decks = [];
+              var deck_id = req.params.id;
               if (typeof deck.cards[deck.cards.length - 1][0] === 'object') {
                 //old format
                 deck.cards[0].forEach(function(card, index) {
@@ -2066,12 +2067,14 @@ router.get('/deck/:id', function(req, res) {
                 for (i = 0; i < deck.bots.length; i++) {
                   bot_names.push("Seat " + (i + 2) + ": " + deck.bots[i][0] + ", " + deck.bots[i][1]);
                 }
+                
                 return res.render('cube/cube_deck', {
                   oldformat: true,
                   cube: cube,
                   cube_id: get_cube_id(cube),
                   owner: owner_name,
                   activeLink: 'playtest',
+                  deck_id: deck_id,
                   drafter: drafter_name,
                   cards: player_deck,
                   bot_decks: bot_decks,
@@ -2102,6 +2105,7 @@ router.get('/deck/:id', function(req, res) {
                   owner: owner_name,
                   activeLink: 'playtest',
                   drafter: drafter_name,
+                  deck_id: deck_id,
                   deck: JSON.stringify(deck.playerdeck),
                   bot_decks: bot_decks,
                   bots: bot_names,

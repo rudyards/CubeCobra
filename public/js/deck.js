@@ -17,7 +17,6 @@ window.onresize = function() {
   renderDraft();
 }
 
-
 function renderDraft() {
   setupColumns();
 
