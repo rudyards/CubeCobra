@@ -1921,8 +1921,8 @@ router.get('/decks/:id', function(req, res) {
   });
 });
 
-router.get('/decks/:id/export', function(req, res) {
-  Deck.findOne(build_id_query(req.params.id), function(err, deck) {
+router.get('/deck/download/:id', function(req, res) {
+  Deck.findById(req.params.id, function(err, deck) {
     if (!deck) {
       req.flash('danger', 'Deck not found');
       res.redirect('/404/');
@@ -1931,7 +1931,7 @@ router.get('/decks/:id/export', function(req, res) {
       res.setHeader('Content-type', 'text/plain');
       res.charset = 'UTF-8';
       res.write('Name,CMC,Type,Color,Set,Status,Tags\r\n');
-      cube.cards.forEach(function(card, index) {
+      deck.cards.forEach(function(card, index) {
         if (!card.type_line) {
           card.type_line = carddb.carddict[card.cardID].type;
         }
