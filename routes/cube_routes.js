@@ -1921,7 +1921,7 @@ router.get('/decks/:id', function(req, res) {
   });
 });
 
-router.get('/deck/download/:id/', function(req, res) {
+router.get('/deck/download/:id', function(req, res) {
   Deck.findById(req.params.id, function(err, deck) {
     if (!deck) {
       req.flash('danger', 'Deck not found');
