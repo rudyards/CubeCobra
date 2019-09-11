@@ -398,6 +398,12 @@ router.get('/overview/:id', function(req, res) {
                 num_cards: cube.cards.length,
                 author: 'unknown',
                 post: blogs[0],
+                metadata: generateMeta(
+                  `Cube Cobra Overview: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/cube/overview/${req.params.id}`
+                ),
                 loginCallback: '/cube/overview/' + req.params.id,
                 price: sum.toFixed(2)
               });
@@ -410,6 +416,12 @@ router.get('/overview/:id', function(req, res) {
                 num_cards: cube.cards.length,
                 owner: user.username,
                 post: blogs[0],
+                metadata: generateMeta(
+                  `Cube Cobra Overview: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/cube/overview/${req.params.id}`
+                ),
                 loginCallback: '/cube/overview/' + req.params.id,
                 editorvalue: cube.raw_desc,
                 price: sum.toFixed(2)
@@ -499,6 +511,12 @@ router.get('/blog/:id', function(req, res) {
                 activeLink: 'blog',
                 posts: blog_page,
                 pages: pages,
+                metadata: generateMeta(
+                  `Cube Cobra Blog: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/cube/blog/${req.params.id}`
+                ),
                 loginCallback: '/cube/blog/' + req.params.id
               });
             } else {
@@ -508,6 +526,12 @@ router.get('/blog/:id', function(req, res) {
                 owner: user.username,
                 activeLink: 'blog',
                 posts: blogs,
+                metadata: generateMeta(
+                  `Cube Cobra Blog: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/cube/blog/${req.params.id}`
+                ),
                 loginCallback: '/cube/blog/' + req.params.id
               });
             }
@@ -517,6 +541,12 @@ router.get('/blog/:id', function(req, res) {
               cube_id: cube_id,
               owner: user.username,
               activeLink: 'blog',
+              metadata: generateMeta(
+                `Cube Cobra Blog: ${cube.name}`,
+                (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                cube.image_uri,
+                `https://cubecobra.com/cube/blog/${req.params.id}`
+              ),
               loginCallback: '/cube/blog/' + req.params.id
             });
           }
@@ -607,11 +637,18 @@ router.get('/compare/:id_a/to/:id_b', function(req, res) {
                 cube: cubeA,
                 cubeB: cubeB,
                 cube_id: id_a,
+                cube_b_id: id_b,
                 title: `Comparing ${cubeA.name} to ${cubeB.name}`,
                 in_both: JSON.stringify(in_both.map(card => card.details.name)),
                 only_a: JSON.stringify(a_names),
                 only_b: JSON.stringify(b_names),
                 cube_raw: JSON.stringify(all_cards),
+                metadata: generateMeta(
+                  'Cube Cobra Compare Cubes',
+                  `Comparing "${cubeA.name}" To "${cubeB.name}"`,
+                  cubeA.image_uri,
+                  `https://cubecobra.com/cube/compare/${id_a}/to/${id_b}`
+                ),
                 loginCallback: '/cube/compare/' + id_a + '/to/' + id_b,
               };
 
@@ -661,6 +698,12 @@ router.get('/list/:id', function(req, res) {
           cube_id: req.params.id,
           title: `${cube.name}: List`,
           cube_raw: JSON.stringify(cube.cards),
+          metadata: generateMeta(
+            `Cube Cobra List: ${cube.name}`,
+            (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+            cube.image_uri,
+            `https://cubecobra.com/cube/list/${req.params.id}`
+          ),
           loginCallback: '/cube/list/' + req.params.id
         });
       });
@@ -692,6 +735,12 @@ router.get('/playtest/:id', function(req, res) {
               author: 'unknown',
               decks: decklinks,
               cube_raw: JSON.stringify(cube),
+              metadata: generateMeta(
+                `Cube Cobra Playtest: ${cube.name}`,
+                (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                cube.image_uri,
+                `https://cubecobra.com/cube/playtest/${req.params.id}`
+              ),
               loginCallback: '/cube/playtest/' + req.params.id
             });
           } else {
@@ -702,6 +751,12 @@ router.get('/playtest/:id', function(req, res) {
               owner: user.username,
               decks: decklinks,
               cube_raw: JSON.stringify(cube),
+              metadata: generateMeta(
+                `Cube Cobra Playtest: ${cube.name}`,
+                (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                cube.image_uri,
+                `https://cubecobra.com/cube/playtest/${req.params.id}`
+              ),
               loginCallback: '/cube/playtest/' + req.params.id
             });
           }
@@ -732,6 +787,12 @@ router.get('/analysis/:id', function(req, res) {
             TypeByColor: analytics.GetTypeByColor(cube.cards, carddb),
             MulticoloredCounts: analytics.GetColorCounts(cube.cards, carddb),
             curve: JSON.stringify(analytics.GetCurve(cube.cards, carddb)),
+            metadata: generateMeta(
+              `Cube Cobra Analysis: ${cube.name}`,
+              (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+              cube.image_uri,
+              `https://cubecobra.com/cube/analysis/${req.params.id}`
+            ),
             loginCallback: '/cube/analysis/' + req.params.id
           });
         } else {
@@ -743,6 +804,12 @@ router.get('/analysis/:id', function(req, res) {
             TypeByColor: analytics.GetTypeByColor(cube.cards, carddb),
             MulticoloredCounts: analytics.GetColorCounts(cube.cards, carddb),
             curve: JSON.stringify(analytics.GetCurve(cube.cards, carddb)),
+            metadata: generateMeta(
+              `Cube Cobra Analysis: ${cube.name}`,
+              (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+              cube.image_uri,
+              `https://cubecobra.com/cube/analysis/${req.params.id}`
+            ),
             loginCallback: '/cube/analysis/' + req.params.id
           });
         }
@@ -768,6 +835,12 @@ router.get('/samplepack/:id', function(req, res) {
             pack: pack.pack,
             seed: pack.seed,
             activeLink: 'playtest',
+            metadata: generateMeta(
+              `Cube Cobra Random Sample Pack: ${cube.name}`,
+              (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+              cube.image_uri,
+              `https://cubecobra.com/cube/samplepack/${req.params.id}`
+            ),
             loginCallback: '/cube/samplepack/' + req.params.id
           });
         }
@@ -812,7 +885,7 @@ router.get('/samplepackimage/:id/:seed', function(req, res) {
       req.flash('danger', 'Pack could not be created');
       res.redirect('/404/');
     } else {
-      var srcArray = pack.map((card, index) => {
+      var srcArray = pack.pack.map((card, index) => {
         return {
           src: card.image_small,
           x: CARD_WIDTH * (index % 5),
@@ -983,12 +1056,14 @@ function bulkuploadCSV(req, res, cards, cube) {
     let split = util.CSVtoArray(card_raw);
     let name = split[0];
     let card = {
+      name: name,
       cmc: split[1],
       type_line: split[2].replace('-', '—'),
       colors: split[3].split(''),
       set: split[4].toUpperCase(),
-      status: split[5],
-      tags: split[6].split(',')
+      collector_number: split[5],
+      status: split[6],
+      tags: split[7].split(',')
     };
 
     let potentialIds = carddb.allIds(card);
@@ -997,9 +1072,9 @@ function bulkuploadCSV(req, res, cards, cube) {
       let matchingSet = potentialIds.find(id => carddb.carddict[id].set.toUpperCase() == card.set);
       let nonPromo = potentialIds.find(notPromoOrDigitalId);
       let first = potentialIds[0];
-      card.id = matchingSet || nonPromo || first;
+      card.cardID = matchingSet || nonPromo || first;
       cube.cards.push(card);
-      changelog += addCardHtml(carddb.carddict[card.id]);
+      changelog += addCardHtml(carddb.carddict[card.cardID]);
     } else {
       missing += card.name + '\n';
     }
@@ -1047,7 +1122,7 @@ function bulkuploadCSV(req, res, cards, cube) {
 function bulkUpload(req, res, list, cube) {
   cards = list.match(/[^\r\n]+/g);
   if (cards) {
-    if (cards[0].trim() == 'Name,CMC,Type,Color,Set,Status,Tags') {
+    if (cards[0].trim() == 'Name,CMC,Type,Color,Set,Collector Number,Status,Tags') {
       cards.splice(0, 1);
       bulkuploadCSV(req, res, cards, cube);
     } else {
@@ -1076,7 +1151,7 @@ function bulkUpload(req, res, list, cube) {
                 let set = item.toLowerCase().substring(item.indexOf('(') + 1, item.indexOf(')'))
                 //if we've found a match, and it DOES need to be parsed with cubecobra syntax
                 let potentialIds = carddb.nameToId[name];
-                selected = potentialIds.find(id => carddb.carddict[id].set.toUpperCase() == card.set);
+                selected = potentialIds.find(id => carddb.carddict[id].set.toUpperCase() == set);
               }
             } else {
               //does not have set info
@@ -1168,7 +1243,7 @@ router.get('/download/csv/:id', function(req, res) {
       res.setHeader('Content-disposition', 'attachment; filename=' + cube.name.replace(/\W/g, '') + '.csv');
       res.setHeader('Content-type', 'text/plain');
       res.charset = 'UTF-8';
-      res.write('Name,CMC,Type,Color,Set,Status,Tags\r\n');
+      res.write('Name,CMC,Type,Color,Set,Collector Number,Status,Tags\r\n');
       cube.cards.forEach(function(card, index) {
         if (!card.type_line) {
           card.type_line = carddb.carddict[card.cardID].type;
@@ -1194,6 +1269,7 @@ router.get('/download/csv/:id', function(req, res) {
           res.write(',');
         }
         res.write('"' + carddb.carddict[card.cardID].set + '"' + ',');
+        res.write('"' + carddb.carddict[card.cardID].collector_number + '"' + ',');
         res.write(card.status + ',"');
         card.tags.forEach(function(tag, t_index) {
           if (t_index != 0) {
@@ -1202,6 +1278,48 @@ router.get('/download/csv/:id', function(req, res) {
           res.write(tag);
         });
         res.write('"\r\n');
+      });
+      res.end();
+    }
+  });
+});
+
+router.get('/download/forge/:id', function(req, res) {
+  Cube.findOne(build_id_query(req.params.id), function(err, cube) {
+    if (!cube) {
+      req.flash('danger', 'Cube not found');
+      res.redirect('/404/');
+    } else {
+      res.setHeader('Content-disposition', 'attachment; filename=' + cube.name.replace(/\W/g, '') + '.dck');
+      res.setHeader('Content-type', 'text/plain');
+      res.charset = 'UTF-8';
+      res.write('[metadata]\r\n');
+      res.write('Name=' + cube.name + '\r\n');
+      res.write('[Main]\r\n');
+      cube.cards.forEach(function(card, index) {
+        var name = carddb.carddict[card.cardID].name;
+        var set = carddb.carddict[card.cardID].set;
+        res.write('1 ' + name + '|' + set.toUpperCase() + '\r\n');
+      });
+      res.end();
+    }
+  });
+});
+
+router.get('/download/xmage/:id', function(req, res) {
+  Cube.findOne(build_id_query(req.params.id), function(err, cube) {
+    if (!cube) {
+      req.flash('danger', 'Cube not found');
+      res.redirect('/404/');
+    } else {
+      res.setHeader('Content-disposition', 'attachment; filename=' + cube.name.replace(/\W/g, '') + '.dck');
+      res.setHeader('Content-type', 'text/plain');
+      res.charset = 'UTF-8';
+      cube.cards.forEach(function(card, index) {
+        var name = carddb.carddict[card.cardID].name;
+        var set = carddb.carddict[card.cardID].set;
+        var collectorNumber = carddb.carddict[card.cardID].collector_number;
+        res.write('1 [' + set.toUpperCase() + ':' + collectorNumber + '] ' + name + '\r\n');
       });
       res.end();
     }
@@ -1467,6 +1585,12 @@ router.get('/draft/:id', function(req, res) {
                   cube_id: get_cube_id(cube),
                   owner: 'Unknown',
                   activeLink: 'playtest',
+                  metadata: generateMeta(
+                    `Cube Cobra Draft: ${cube.name}`,
+                    (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                    cube.image_uri,
+                    `https://cubecobra.com/cube/draft/${req.params.id}`
+                  ),
                   loginCallback: '/cube/draft/' + req.params.id,
                   draft_raw: JSON.stringify(draft)
                 });
@@ -1476,6 +1600,12 @@ router.get('/draft/:id', function(req, res) {
                   cube_id: get_cube_id(cube),
                   owner: user.username,
                   activeLink: 'playtest',
+                  metadata: generateMeta(
+                    `Cube Cobra Draft: ${cube.name}`,
+                    (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                    cube.image_uri,
+                    `https://cubecobra.com/cube/draft/${req.params.id}`
+                  ),
                   loginCallback: '/cube/draft/' + req.params.id,
                   draft_raw: JSON.stringify(draft)
                 });
@@ -1544,7 +1674,7 @@ router.post('/editoverview/:id', ensureAuth, function(req, res) {
           cube.descriptionhtml = req.body.html;
           cube.name = name;
           cube.isListed = req.body.isListed ? true : false;
-          cube.publicPrices = req.body.publicPrices ? true : false;
+          cube.privatePrices = req.body.privatePrices ? true : false;
           cube.urlAlias = req.body.urlAlias ? req.body.urlAlias.toLowerCase() : null;
           cube.date_updated = Date.now();
           cube.updated_string = cube.date_updated.toLocaleString("en-US");
@@ -1742,6 +1872,70 @@ router.get('/api/cubecardnames/:id', function(req, res) {
   });
 });
 
+router.post('/api/savetagcolors/:id', function(req, res) {
+  Cube.findOne(build_id_query(req.params.id), function(err, cube) {
+    cube.tag_colors = req.body;
+
+    cube.save(function(err) {
+      if (err) console.log(err);
+      res.status(200).send({
+        success: 'true',
+      });
+    });
+  });
+});
+
+function build_tag_colors(cube) {
+  let tag_colors = cube.tag_colors;
+  let tags = tag_colors.map(item => item.tag);
+  let not_found = tag_colors.map(item => item.tag);
+
+  cube.cards.forEach(function(card, index) {
+    card.tags.forEach(function(tag, index) {
+      tag = tag.trim();
+      if (!tags.includes(tag)) {
+        tag_colors.push({
+          tag,
+          color: null
+        });
+        tags.push(tag);
+      }
+      if (not_found.includes(tag)) not_found.splice(not_found.indexOf(tag), 1);
+    });
+  });
+
+  let tmp = [];
+  tag_colors.forEach(function(item, index) {
+    if (!not_found.includes(item.tag)) tmp.push(item);
+  });
+  tag_colors = tmp;
+
+  return tag_colors;
+}
+
+router.get('/api/cubetagcolors/:id', function(req, res) {
+  Cube.findOne(build_id_query(req.params.id), function(err, cube) {
+    let tag_colors = build_tag_colors(cube);
+    let tags = tag_colors.map(item => item.tag);
+
+    Cube.findOne(build_id_query(req.query.b_id), function(err, cubeB) {
+      if (cubeB) {
+        let b_tag_colors = build_tag_colors(cubeB);
+        for (let b_tag of b_tag_colors) {
+          if (!tags.includes(b_tag.tag)) {
+            tag_colors.push(b_tag);
+          }
+        }
+      }
+
+      res.status(200).send({
+        success: 'true',
+        tag_colors: tag_colors,
+      });
+    });
+  });
+});
+
 router.get('/api/getcardfromcube/:id', function(req, res) {
   var split = req.params.id.split(';');
   var cube = split[0];
@@ -1893,6 +2087,12 @@ router.get('/decks/:id', function(req, res) {
                 activeLink: 'playtest',
                 decks: deck_page,
                 pages: pages,
+                metadata: generateMeta(
+                  `Cube Cobra Decks: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/user/decks/${req.params.id}`
+                ),
                 loginCallback: '/user/decks/' + cubeid
               });
             } else {
@@ -1902,6 +2102,12 @@ router.get('/decks/:id', function(req, res) {
                 owner: owner_name,
                 activeLink: 'playtest',
                 decks: decks,
+                metadata: generateMeta(
+                  `Cube Cobra Decks: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/user/decks/${req.params.id}`
+                ),
                 loginCallback: '/user/decks/' + cubeid
               });
             }
@@ -1911,6 +2117,12 @@ router.get('/decks/:id', function(req, res) {
               cube_id: cubeid,
               owner: owner_name,
               activeLink: 'playtest',
+              metadata: generateMeta(
+                `Cube Cobra Decks: ${cube.name}`,
+                (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                cube.image_uri,
+                `https://cubecobra.com/user/decks/${req.params.id}`
+              ),
               loginCallback: '/user/decks/' + cubeid,
               decks: []
             });
@@ -1950,6 +2162,12 @@ router.get('/deckbuilder/:id', function(req, res) {
                 cube_id: get_cube_id(cube),
                 owner: 'Unknown',
                 activeLink: 'playtest',
+                metadata: generateMeta(
+                  `Cube Cobra Draft: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/cube/draft/${req.params.id}`
+                ),
                 loginCallback: '/cube/draft/' + req.params.id,
                 deck_raw: JSON.stringify(deck),
                 basics_raw: JSON.stringify(getBasics(carddb)),
@@ -1961,6 +2179,12 @@ router.get('/deckbuilder/:id', function(req, res) {
                 cube_id: get_cube_id(cube),
                 owner: user.username,
                 activeLink: 'playtest',
+                metadata: generateMeta(
+                  `Cube Cobra Draft: ${cube.name}`,
+                  (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                  cube.image_uri,
+                  `https://cubecobra.com/cube/draft/${req.params.id}`
+                ),
                 loginCallback: '/cube/draft/' + req.params.id,
                 deck_raw: JSON.stringify(deck),
                 basics_raw: JSON.stringify(getBasics(carddb)),
@@ -2027,6 +2251,12 @@ router.get('/deck/:id', function(req, res) {
                   cards: player_deck,
                   bot_decks: bot_decks,
                   bots: bot_names,
+                  metadata: generateMeta(
+                    `Cube Cobra Deck: ${cube.name}`,
+                    (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                    cube.image_uri,
+                    `https://cubecobra.com/cube/deck/${req.params.id}`
+                  ),
                   loginCallback: '/cube/deck/' + req.params.id
                 });
               } else {
@@ -2056,6 +2286,12 @@ router.get('/deck/:id', function(req, res) {
                   deck: JSON.stringify(deck.playerdeck),
                   bot_decks: bot_decks,
                   bots: bot_names,
+                  metadata: generateMeta(
+                    `Cube Cobra Deck: ${cube.name}`,
+                    (cube.type) ? `${cube.card_count} Card ${cube.type} Cube` : `${cube.card_count} Card Cube`,
+                    cube.image_uri,
+                    `https://cubecobra.com/cube/deck/${req.params.id}`
+                  ),
                   loginCallback: '/cube/deck/' + req.params.id
                 });
               }
