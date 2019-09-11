@@ -2133,6 +2133,55 @@ router.get('/decks/:id', function(req, res) {
   });
 });
 
+router.get('/deck/download/:id', function(req, res) {
+  Deck.findById(req.params.id, function(err, deck) {
+    if (!deck) {
+      req.flash('danger', 'Deck not found');
+      res.redirect('/404/');
+    } else {
+      res.setHeader('Content-disposition', 'attachment; filename=' + deck.name.replace(/\W/g, '') + '.csv');
+      res.setHeader('Content-type', 'text/plain');
+      res.charset = 'UTF-8';
+      res.write('Name,CMC,Type,Color,Set,Status,Tags\r\n');
+      deck.cards.forEach(function(card, index) {
+        if (!card.type_line) {
+          card.type_line = carddb.carddict[card.cardID].type;
+        }
+        var name = carddb.carddict[card.cardID].name;
+        while (name.includes('"')) {
+          name = name.replace('"', '-quote-');
+        }
+        while (name.includes('-quote-')) {
+          name = name.replace('-quote-', '""');
+        }
+        res.write('"' + name + '"' + ',');
+        res.write(card.cmc + ',');
+        res.write('"' + card.type_line.replace('—', '-') + '"' + ',');
+        if (card.colors.length == 0) {
+          res.write('C,');
+        } else if (card.type_line.toLowerCase().includes('land')) {
+          res.write('L,');
+        } else {
+          card.colors.forEach(function(color, c_index) {
+            res.write(color);
+          });
+          res.write(',');
+        }
+        res.write('"' + carddb.carddict[card.cardID].set + '"' + ',');
+        res.write(card.status + ',"');
+        card.tags.forEach(function(tag, t_index) {
+          if (t_index != 0) {
+            res.write(', ');
+          }
+          res.write(tag);
+        });
+        res.write('"\r\n');
+      });
+      res.end();
+    }
+  });
+});
+
 router.get('/deckbuilder/:id', function(req, res) {
   Deck.findById(req.params.id, function(err, deck) {
     if (err || !deck) {
@@ -2221,6 +2270,7 @@ router.get('/deck/:id', function(req, res) {
               }
               var player_deck = [];
               var bot_decks = [];
+              var deck_id = req.params.id;
               if (typeof deck.cards[deck.cards.length - 1][0] === 'object') {
                 //old format
                 deck.cards[0].forEach(function(card, index) {
@@ -2241,12 +2291,14 @@ router.get('/deck/:id', function(req, res) {
                 for (i = 0; i < deck.bots.length; i++) {
                   bot_names.push("Seat " + (i + 2) + ": " + deck.bots[i][0] + ", " + deck.bots[i][1]);
                 }
+                
                 return res.render('cube/cube_deck', {
                   oldformat: true,
                   cube: cube,
                   cube_id: get_cube_id(cube),
                   owner: owner_name,
                   activeLink: 'playtest',
+                  deck_id: deck_id,
                   drafter: drafter_name,
                   cards: player_deck,
                   bot_decks: bot_decks,
@@ -2283,6 +2335,7 @@ router.get('/deck/:id', function(req, res) {
                   owner: owner_name,
                   activeLink: 'playtest',
                   drafter: drafter_name,
+                  deck_id: deck_id,
                   deck: JSON.stringify(deck.playerdeck),
                   bot_decks: bot_decks,
                   bots: bot_names,

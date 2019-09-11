@@ -44,6 +44,10 @@
 	color: #5A4181;
 }
 
+.exportButton {
+    margin-left: 20px;
+}
+
 .pagination>li>a:focus,
 .pagination>li>a:hover,
 .pagination>li>span:focus,

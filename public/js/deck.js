@@ -17,6 +17,7 @@ window.onresize = function() {
   renderDraft();
 }
 
+
 var hasCustomImages = false;
 $("#customImageDisplayMenuItem").hide();
 deck.forEach(function(inner, index) {
