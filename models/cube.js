@@ -23,7 +23,7 @@ let cubeSchema = mongoose.Schema({
     type: Boolean,
     default: true
   },
-  publicPrices: {
+  privatePrices: {
     type: Boolean,
     default: false
   },
@@ -37,6 +37,10 @@ let cubeSchema = mongoose.Schema({
     addedTmsp: Date,
     imgUrl: String,
     details: {}
+  }],
+  tag_colors: [{
+    tag: String,
+    color: String,
   }],
   decks: [String],
   numDecks: Number,

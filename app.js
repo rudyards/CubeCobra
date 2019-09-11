@@ -65,6 +65,8 @@ app.set('view engine', 'pug');
 
 // Set Public Folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/js', express.static(path.join(__dirname, 'dist')));
+app.use('/jquery-ui', express.static(__dirname + '/node_modules/jquery-ui-dist/'));
 
 let session_options = {
   secret: secrets.session,
@@ -387,6 +389,11 @@ app.get('/donate', function(req, res) {
 
 app.get('/404', function(req, res) {
   res.render('misc/404', {});
+});
+
+app.get('/c/:id', function(req, res)
+{
+  res.redirect('/cube/list/'+req.params.id);
 });
 
 //Route files
