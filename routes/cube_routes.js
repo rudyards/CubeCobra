@@ -1159,7 +1159,7 @@ router.get('/download/cubecobra/:id', function(req, res) {
   });
 });
 
-router.get('/test/csv/:id', function(req, res) {
+router.get('/download/csv/:id', function(req, res) {
   Cube.findOne(build_id_query(req.params.id), function(err, cube) {
     if (!cube) {
       req.flash('danger', 'Cube not found');
@@ -1921,7 +1921,7 @@ router.get('/decks/:id', function(req, res) {
   });
 });
 
-router.get('/deck/download/:id', function(req, res) {
+router.get('/deck/download/:id/', function(req, res) {
   Deck.findById(req.params.id, function(err, deck) {
     if (!deck) {
       req.flash('danger', 'Deck not found');
